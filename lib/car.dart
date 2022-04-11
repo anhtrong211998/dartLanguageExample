@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Car {
-   late String name;
-   late int yearOfProduction;
+    String name;
+    int yearOfProduction;
 
   // Constructor with named arguments
   Car({
