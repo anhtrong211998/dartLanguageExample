@@ -13,12 +13,38 @@ class MyAppStatefull extends StatefulWidget {
   }
 }
 
-class _MyAppState extends State<MyAppStatefull> {
+class _MyAppState extends State<MyAppStatefull> with WidgetsBindingObserver{
   String _email = '';
   final emailEditingController = TextEditingController();
 
   @override
+  void initState(){
+    super.initState();
+    WidgetsBinding.instance?.addObserver(this);
+    print('Run initial state.....');
+  }
+
+  // when you know 'the app is in background mode or not'
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state){
+    super.didChangeAppLifecycleState(state);
+    if(state == AppLifecycleState.paused){
+      print('App is in Background mode');
+    }else if(state == AppLifecycleState.resumed){
+      print('App is in Foreground mode'); //use mode (miniumze)
+    }
+  }
+  @override
+  void dispose(){
+    super.dispose();
+    emailEditingController.dispose();
+    WidgetsBinding.instance?.removeObserver(this);
+    print('run dispose() ...');
+  }
+
+  @override
   Widget build(BuildContext context){
+    print('build run....');
     // TODO: implement build
     return MaterialApp(
       title: 'This is StateFullWidget',
