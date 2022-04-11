@@ -35,6 +35,21 @@ void main() {
       && element.name.toUpperCase().contains('AMG')).toList();
   print(filteredCars);
 
+  // now we try with final and constant
+  // when work with array, final and constant cannot reference to another array but
+  // final can add more element
+  const List<int> numberConst = [1,2,3,4];
+  // numberConst.add(99); // return error
+
+  final List<int> numberFinal = [2,3,4,5];
+  numberFinal.add(99); // now numberFinal array will have 5 elements are 2,3,4,5,99
+
+  // you can create an Object without creating a class <=> Map type
+  // usually use this in draw graphic
+  Map<String, dynamic> persons = Map(); // key: String, value: dynamic
+  persons['name'] = 'Trong';
+  persons['age'] = 23;
+
   runApp(
     Center(child: Text(
       cars.toString(),
