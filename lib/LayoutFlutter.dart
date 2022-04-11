@@ -49,6 +49,25 @@ class _MyApplicationState extends State<LayoutFlutter> with WidgetsBindingObserv
 
   @override
   Widget build(BuildContext context){
+    List<Widget> _buildWidgetList(){
+      return _transactions.map((e){
+        return Card(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10)
+          ),
+          elevation: 10,
+          child: ListTile(
+            leading: const Icon(Icons.arrow_right_alt),
+            title: Text(e.content),
+            subtitle: Text('Price: ${e.amount}', style: const TextStyle(fontWeight: FontWeight.bold)),
+            onTap: (){
+              print('Tap me');
+            },
+          ),
+        );
+      }).toList();
+    }
+    
     return MaterialApp(
       title: 'This is a Layout',
       home: Scaffold(
@@ -102,16 +121,7 @@ class _MyApplicationState extends State<LayoutFlutter> with WidgetsBindingObserv
                 ),
               ),
               Column(
-                children: _transactions.map((e){
-                  return ListTile(
-                    leading: const Icon(Icons.arrow_right_alt),
-                    title: Text(e.content),
-                    subtitle: Text('Price: ${e.amount}'),
-                    onTap: (){
-                      print('Tap me');
-                    },
-                  );
-                }).toList(),
+                children: _buildWidgetList(),
               )
             ],
           ),
