@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'Transaction.dart';
 
 class LayoutFlutter extends StatefulWidget {
   @override
@@ -9,14 +10,14 @@ class LayoutFlutter extends StatefulWidget {
 
 class _MyApplicationState extends State<LayoutFlutter> with WidgetsBindingObserver{
   // define a global key
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   // define Edit controller for each text field
   final _contentEditingController = TextEditingController();
   final _amountEditingController = TextEditingController();
 
   // define states
-  String? _content;
-  double? _amount;
+  Transaction _transaction = Transaction(content: '', amount: 0.0);
+  List<Transaction> _transactions = [];
 
   // initialize state
   @override
@@ -62,7 +63,7 @@ class _MyApplicationState extends State<LayoutFlutter> with WidgetsBindingObserv
                 controller: _contentEditingController,
                 onChanged: (text){
                   setState(() {
-                    _content = text;
+                    _transaction.content = text;
                   });
                 },
               ),
@@ -71,24 +72,46 @@ class _MyApplicationState extends State<LayoutFlutter> with WidgetsBindingObserv
                 controller: _amountEditingController,
                 onChanged: (text){
                   setState(() {
-                    _amount = double.tryParse(text) ?? 0;
+                    _transaction.amount = double.tryParse(text) ?? 0;
                   });
                 },
               ),
-              FlatButton(
-                child: const Text('Insert Transaction'),
-                color: Colors.pinkAccent,
-                textColor: Colors.white,
-                onPressed: (){
-                  // print('Content = $_content, money\'s amount = $_amount');
-                  // Display UI
-                  _scaffoldKey.currentState?.showSnackBar(
-                    SnackBar(
-                      content: Text('Content = $_content, money\'s amount = $_amount'),
-                      duration: const Duration(seconds: 3),
-                    )
+              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+              ButtonTheme(
+                height: 50,
+                child: FlatButton(
+                  child: const Text('Insert Transaction'),
+                  color: Colors.pinkAccent,
+                  textColor: Colors.white,
+                  onPressed: (){
+                    // print('Content = $_content, money\'s amount = $_amount');
+                    // Display UI
+                    setState(() {
+                      _transactions.add(_transaction);
+                      _transaction = Transaction(content: '', amount: 0.0);
+                      _contentEditingController.text = '';
+                      _amountEditingController.text = '';
+                    });
+                    // _scaffoldKey.currentState?.showSnackBar(
+                    //     SnackBar(
+                    //       content: Text(_transactions.toString()),
+                    //       duration: const Duration(seconds: 3),
+                    //     )
+                    // );
+                  },
+                ),
+              ),
+              Column(
+                children: _transactions.map((e){
+                  return ListTile(
+                    leading: const Icon(Icons.arrow_right_alt),
+                    title: Text(e.content),
+                    subtitle: Text('Price: ${e.amount}'),
+                    onTap: (){
+                      print('Tap me');
+                    },
                   );
-                },
+                }).toList(),
               )
             ],
           ),
